@@ -1,0 +1,10 @@
+{
+  "name": "IoT-Internet-Weerstation",
+  "version": "0.0.1",
+  "dependencies": {
+    "body-parser": "~1.17.1",
+    "express": "~4.15.2",
+    "mssql": "^4.0.4",
+    "nodemon": "^1.12.1"
+  }
+}
