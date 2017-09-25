@@ -23,6 +23,9 @@ app.get('/api/groet/:naam', function (req,res) {
 
 //POST routes
 app.post('/api/temp', function(req,res) {
+    if (!req.headers['content-type'] ||req.headers['content-type'].indexOf('application/json') !== 0) {
+        return res.sendStatus(412);
+    }
     console.log("binnengekomen temp is: " +req.body.celsius);
     sql.connect(sqlConfig).then(function(conn) {
         new sql.Request(conn).query('INSERT INTO Temperatuur VALUES ('+req.body.celsius+')').then(function(err,recordset){
