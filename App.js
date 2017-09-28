@@ -11,7 +11,8 @@ var tokenExpired;
 app.use(bodyParser.json());
 
 app.listen(3000, function () {
-    console.log('Example app listening on port 3000!')
+    console.log('Example app listening on port 3000!');
+    askTemp();
 });
 
 //config DB
@@ -35,6 +36,38 @@ app.get('/api/groet/:naam', function (req, res) {
 });
 
 //POST routes
+app.post('/api/report', function (req, res) {
+        if (req.body.ID < 10) {
+            //genereer nieuw id op basis van wat we kennen
+            var query = "SELECT top 1 Station_ID FROM WeatherStations ORDER BY Station_ID DESC";
+            SQLquery(query, function (result) {
+                if (result.rowsAffected[0] === 0) {
+                    var query1 = "INSERT INTO WeatherStations values (10, 'On');";
+                    SQLquery(query1, function (result) {
+                        res.send("10");
+                    });
+                }
+                else{
+                    var newID = result.recordset[0].Station_ID;
+                    newID++;
+                    console.log(newID);
+                    var query2 = "INSERT INTO WeatherStations values ("+newID+", 'On');";
+                    SQLquery(query2, function (result) {
+                        res.send(newID.toString());
+                    });
+                }
+            });
+
+        }
+        else {
+            var query = "UPDATE WeatherStations set Station_State = 'On' WHERE Station_ID = "+req.body.ID+"";
+            SQLquery(query, function (result) {
+                res.send(req.body.ID.toString())
+            });
+        }
+    }
+);
+
 app.post('/api/temp', function (req, res) {
     getToken(function () {
         if (!req.headers['content-type'] || req.headers['content-type'].indexOf('application/json') !== 0) {
@@ -133,7 +166,7 @@ function askNewToken(date, _callback) {
         headers: {
             'Content-Type': 'application/x-www-form-urlencoded'
         },
-        body: "grant_type=password&username="+Athentication.username+"&password="+Athentication.password+"",
+        body: "grant_type=password&username=" + Athentication.username + "&password=" + Athentication.password + "",
         json: true
     }, function (error, response, body) {
         token = 'Bearer ' + body.access_token;
@@ -164,4 +197,16 @@ function SQLquery(query, _callback) {
             _callback(false);
         })
     })
+}
+
+function askTemp() {
+    //HIER KOMT DE FUNCTIE OM ELKE 10 MINUTEN AAN ALLE STATION ID'S DIE AANSTAAN DE TEMP TE VRAGEN
+    var query = "SELECT Station_ID from WeatherStations WHERE Station_State = 'On'";
+    SQLquery(query, function (result) {
+        for (var i= 0; i < result.recordset.length; i++) {
+            console.log(result.recordset[i].Station_ID);
+        }
+    });
+    console.log("Ik herhaal dit doodleuk elke 10 seconden");
+    setTimeout(askTemp, 10000)
 }
