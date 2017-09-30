@@ -1,6 +1,6 @@
 var token;
 var tokenExpired;
-var SQLquery = require('../Functions/SQL Functions.js'),
+var SQLquery = require('./SQL Functions.js'),
     request = require('request'),
     getTime = require('../Functions/Time Functions.js'),
     Authentication = require('../Authentication/JorgVischServer');
