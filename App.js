@@ -23,10 +23,7 @@ function askTemp() {
         for (var i = 0; i < result.recordset.length; i++) {
             StationsWithOnState.push(result.recordset[i])
         }
-        console.log(StationsWithOnState);
         GetTemps(StationsWithOnState);
     });
-
-    console.log("Ik herhaal dit doodleuk elke 10 seconden");
-    setTimeout(askTemp, 100000)
+    setTimeout(askTemp, 30000)
 }

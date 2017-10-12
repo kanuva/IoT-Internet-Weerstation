@@ -1,37 +1,42 @@
-var SQLquery = require('./SQL Functions.js'),
-    request = require('request'),
-    updateStationState = require('./Update Station State.js');
+var request = require('request'),
+    updateStationState = require('./Update Station State.js'),
+    getTime = require('./Time Functions.js'),
+    StoreMeasureData = require('./Store Measure data.js');
 
 module.exports = function getTemps(StationsWithOnState) {
     var StationsToTurnOff = [];
-    if (StationsWithOnState.length > 0) {
-        console.log("Ik zou moeten beginnen aan een of ander for loopje..");
-        for (var i = 0; i < StationsWithOnState.length; i++) {
-            (function (i) {
-                var url = "http://192.168.137." + StationsWithOnState[i].Station_ID;
-                console.log(url);
-                request({
-                    url: url,
-                    method: 'GET',
-                    timeout: 1000
-                }, function (error, response, body) {
-                    if (error) {
-                        console.log("ERROR:");
-                        console.log(error);
-                        console.log("Resp: ");
-                        console.log(response);
-                        console.log("body");
-                        console.log(body);
-                        // updateStationState(StationsWithOnState[i].Station_ID, 'off', function () {
-                        //     console.log("Het volgende station ID heb ik uitgezet: " + StationsWithOnState[i].Station_ID);
-                        // })
-                    }
-                    else {
-                        console.log(body);
-                    }
-                });
-            })(i)
-        }
-        StationsWithOnState =[];
+    var incommingTemps= [];
+    var toTurnoff = 0;
+    var toProcess = 0;
+    for (var i = 0; i < StationsWithOnState.length; i++) {
+        request({
+            url: "http://192.168.137." + StationsWithOnState[i].Station_ID,
+            method: 'GET',
+            timeout: 9500
+        }, (function (i) {
+            return function (error, response, body) {
+                if (error) {
+                    StationsToTurnOff.push(StationsWithOnState[i].Station_ID);
+                    toTurnoff++;
+                }
+                else {
+                    incommingTemps.push([[StationsWithOnState[i].Station_ID], [JSON.parse(body.trim()).temp], [JSON.parse(body.trim()).Illuminance], [getTime()]]);
+                    toProcess++;
+
+                }
+                if (toTurnoff + toProcess === StationsWithOnState.length) {
+                    updateStationState(StationsToTurnOff, 'Off',function() {
+                        if (toTurnoff + toProcess === StationsWithOnState.length && incommingTemps.length > 0) {
+                            StoreMeasureData(incommingTemps, function() {
+
+                            });
+                        }
+                    });
+                }
+
+            };
+
+        }(i)));
+
     }
 };
