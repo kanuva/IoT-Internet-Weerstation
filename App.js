@@ -1,12 +1,31 @@
 //config express
 var express = require('express'),
-    request = require('request'),
-    updateStationState = (require('./Functions/Update Station State.js')),
     SQLquery = require('./Functions/SQL Functions.js'),
-    GetTemps = require('./Functions/Get Temps.js');
+    GetTemps = require('./Functions/Get Temps.js'),
+    bodyParser = require('body-parser'),
+    storeNewID = require('./Functions/Store New ID.js');
 var app = express();
+app.use(bodyParser.json());
+//GET routes
+app.get('/', function (req, res) {
+        res.sendFile('./Public/index.html' , { root : __dirname});
+    }
+);
 
-app.use(require('./Routes/Routes.js'));
+//POST routes
+app.post('/api/report', function (req, res) {
+        if (req.body.ID && req.headers['content-type'] === 'application/json') {
+            storeNewID(req.body.ID, function (result) {
+                console.log("result: " + result);
+                res.send(result);
+            });
+        }
+        else {
+            res.sendStatus(400);
+        }
+    }
+);
+
 
 app.listen(3000, function () {
     console.log('Example app listening on port 3000!');

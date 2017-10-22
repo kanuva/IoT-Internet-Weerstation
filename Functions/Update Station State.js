@@ -8,12 +8,11 @@ module.exports = function updateStationState(id, state, _callback) {
         });
         query = query.slice(0, -4);
         console.log(query);
-         var query = "UPDATE WeatherStations set Station_State = '"+state+"' WHERE Station_ID = " + id + "";
-         SQLquery(query, function (result) {
+        SQLquery(query, function (result) {
             _callback();
-         });
+        });
     }
-    else{
+    else {
         _callback();
     }
 };

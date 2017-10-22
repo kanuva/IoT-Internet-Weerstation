@@ -15,7 +15,7 @@ module.exports = function getToken(_callback) {
     currentTime.setHours(currentTime.getHours() + 2);
     currentTime = currentTime.toISOString().replace('Z', '');
     if (tokenExpired < getTime()) {
-        console.log("Server moet een nieuwe token aanvragen omdat deze verlopen is");
+        //console.log("Server moet een nieuwe token aanvragen omdat deze verlopen is");
         askNewToken(newExpireDate, function (Token) {
             tokenExpired = newExpireDate;
             token = Token.access_token;
@@ -24,11 +24,11 @@ module.exports = function getToken(_callback) {
         });
     }
     else if (!token) {
-        console.log("Server heeft nog geen token, dus ik ga kijken of ik iets in de DB heb staan");
+        //console.log("Server heeft nog geen token, dus ik ga kijken of ik iets in de DB heb staan");
         var query = "SELECT top 1 Access_token, Expire_time FROM Token where Issued_time < GETDATE() AND Expire_time > GETDATE() order by Issued_time desc";
         SQLquery(query, function (result) {
             if (result.rowsAffected[0] === 0) {
-                console.log("Er stond niks in de DB dus ik moest naar de server voor een nieuw token");
+                //console.log("Er stond niks in de DB dus ik moest naar de server voor een nieuw token");
                 askNewToken(newExpireDate, function (Token) {
                     tokenExpired = newExpireDate;
                     _callback(token);
@@ -36,7 +36,7 @@ module.exports = function getToken(_callback) {
                 });
             }
             else if (result.rowsAffected[0] > 0) {
-                console.log("Er stond wel iets in de DB wat voldeed aan de vraag, nieuw token wordt gezet");
+                //console.log("Er stond wel iets in de DB wat voldeed aan de vraag, nieuw token wordt gezet");
                 tokenExpired = result.recordset[0].Expire_time.toISOString();
                 token = result.recordset[0].Access_token;
                 _callback(token);
@@ -45,7 +45,7 @@ module.exports = function getToken(_callback) {
         });
     }
     else if (token && tokenExpired > currentTime) {
-        console.log("er is gewoon een token...");
+        //console.log("er is gewoon een token...");
         _callback(token);
         return token;
     }
