@@ -1,10 +1,66 @@
-<!DOCTYPE html>
-<html lang="en">
+<!doctype html>
+<html ng-app="weatherstationApp">
 <head>
-    <meta charset="UTF-8">
-    <title>test</title>
+
+    <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.6.6/angular.min.js"></script>
+    <script src="js/Chart.min.js"></script>
+    <script src="js/angular-chart.min.js"></script>
+
+    <script src="js/functions.js"></script>
+
+    <link href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" rel="stylesheet">
 </head>
 <body>
-    <h1>test</h1>
+<div ng-controller="dataController as stationData">
+    <div class="col-sm-2">
+        <ul class="sidebar-nav">
+            <li ng-repeat="stations in stationData.stations" class="list-group-item">
+                <a ng-click="setSelectedStation($event)"
+                        ng-attr-id="{{stations.Station_ID}}"
+                        class="btn btn-default"
+                        ng-class="{'btn-primary' : activeStation == stations.Station_ID}">{{stations.Station_ID}}</a>
+            </li>
+        </ul>
+    </div>
+    <div class="col-sm-10">
+        <h1>Selected station = {{stationData.selectedStation}}</h1>
+        <ul ng-show="stationData.data != null" class="nav nav-tabs">
+            <li ng-repeat='item in menuItems' ng-class="{active : activeMenu === item}">
+                <a href="#" ng-click="setActive(item)">
+                    {{item}}
+                </a>
+            </li>
+        </ul>
+        <table class="table" ng-show="stationData.data != null && activeMenu === 'Table'">
+            <tr>
+                <th>Station_ID</th>
+                <th>Time</th>
+                <th>Celcius</th>
+                <th>Illuminance</th>
+            </tr>
+            <tr ng-repeat="data in stationData.data">
+                <td>{{data.Station_ID}}</td>
+                <td>{{data.Time}}</td>
+                <td>{{data.Temperature_celsius}}</td>
+                <td>{{data.Illuminate}}</td>
+            </tr>
+        </table>
+        <div ng-show="stationData.data != null && activeMenu === 'Temp Graph'">
+            <h1>Hier komt de graph</h1>
+            <canvas id="line" class="chart chart-line" chart-data="tempData"
+                    chart-labels="labels" chart-options="options"
+                    chart-click="onClick">
+            </canvas>
+        </div>
+        <div ng-show="stationData.data != null && activeMenu === 'Light Graph'">
+            <h1>Hier komt de graph</h1>
+            <canvas id="line" class="chart chart-line" chart-data="lightData"
+                    chart-labels="labels" chart-options="options"
+                    chart-click="onClick">
+            </canvas>
+        </div>
+    </div>
+
+</div>
 </body>
 </html>

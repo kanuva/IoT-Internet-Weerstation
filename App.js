@@ -1,16 +1,32 @@
 //config express
 var express = require('express'),
+    path = require('path'),
     SQLquery = require('./Functions/SQL Functions.js'),
     GetTemps = require('./Functions/Get Temps.js'),
     bodyParser = require('body-parser'),
     storeNewID = require('./Functions/Store New ID.js');
 var app = express();
+app.use(express.static(path.join(__dirname, 'Public')));
 app.use(bodyParser.json());
 //GET routes
 app.get('/', function (req, res) {
         res.sendFile('./Public/index.html' , { root : __dirname});
     }
 );
+
+app.get('/api/getStations',function(req,res) {
+    var query1= 'SELECT Station_ID from Measuredata group by Station_ID';
+    SQLquery(query1, function(result) {
+       res.send(result.recordset);
+    });
+});
+
+app.get('/api/getStationData/:station_ID', function (req, res) {
+    var query2 = 'Select * from Measuredata where Station_ID = ' + req.params.station_ID + 'ORDER BY Time desc';
+    SQLquery(query2, function(result) {
+        res.send(result.recordset);
+    })
+});
 
 //POST routes
 app.post('/api/report', function (req, res) {
