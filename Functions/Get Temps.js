@@ -19,10 +19,9 @@ module.exports = function getTemps(StationsWithOnState) {
                     StationsToTurnOff.push(StationsWithOnState[i].Station_ID);
                     toTurnoff++;
                 }
-                else {
-                    incommingTemps.push([[StationsWithOnState[i].Station_ID], [JSON.parse(body.trim()).temp], [JSON.parse(body.trim()).Illuminance], [getTime.getTime()]]);
+                else {                    //station_ID                                      //gemeette temp                 //gemeette illuminance   //millis van arduino             //tijd wanneer de arduino aan gegaan is
+                    incommingTemps.push([[StationsWithOnState[i].Station_ID], [JSON.parse(body.trim()).temp], [JSON.parse(body.trim()).Illuminance], [JSON.parse(body.trim()).TimeBeingOn], [StationsWithOnState[i].Station_On_Time]]);
                     toProcess++;
-
                 }
                 if (toTurnoff + toProcess === StationsWithOnState.length) {
                     updateStationState(StationsToTurnOff, 'Off',function() {

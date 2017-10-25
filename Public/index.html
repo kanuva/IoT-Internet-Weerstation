@@ -1,14 +1,14 @@
 <!doctype html>
 <html ng-app="weatherstationApp">
 <head>
-
-    <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.6.6/angular.min.js"></script>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+    <script src="js/angular.min.js"></script>
     <script src="js/Chart.min.js"></script>
     <script src="js/angular-chart.min.js"></script>
-
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
     <script src="js/functions.js"></script>
 
-    <link href="CSS/bootstrap.min.css" rel="stylesheet">
+    <link href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" rel="stylesheet">
 </head>
 <body>
 <div ng-controller="dataController as stationData">
@@ -23,7 +23,19 @@
         </ul>
     </div>
     <div class="col-sm-10">
-        <h1>Selected station = {{stationData.selectedStation}}</h1>
+        <div class='page-header'>
+            <div class='btn-toolbar pull-right'>
+                <div class='btn-group'>
+                    <button type="button" class="btn btn-primary btn-sm" ng-click="refreshPage()">
+                        <span class="glyphicon glyphicon-refresh"></span> Refresh
+                    </button>
+                </div>
+            </div>
+            <h1>Selected station = {{stationData.selectedStation}}</h1>
+
+        </div>
+
+
         <ul ng-show="stationData.data != null" class="nav nav-tabs">
             <li ng-repeat='item in menuItems' ng-class="{active : activeMenu === item}">
                 <a href="#" ng-click="setActive(item)">
@@ -31,6 +43,7 @@
                 </a>
             </li>
         </ul>
+        <br/>
         <table class="table" ng-show="stationData.data != null && activeMenu === 'Table'">
             <tr>
                 <th>Station_ID</th>

@@ -58,7 +58,7 @@ app.listen(3000, function () {
 function askTemp() {
     //HIER KOMT DE FUNCTIE OM ELKE 10 MINUTEN AAN ALLE STATION ID'S DIE AANSTAAN DE TEMP TE VRAGEN
     var StationsWithOnState = [];
-    var query = "SELECT Station_ID from WeatherStations WHERE Station_State = 'On'";
+    var query = "SELECT Station_ID, Station_On_Time from WeatherStations WHERE Station_State = 'On'";
     SQLquery(query, function (result) {
         for (var i = 0; i < result.recordset.length; i++) {
             StationsWithOnState.push(result.recordset[i])

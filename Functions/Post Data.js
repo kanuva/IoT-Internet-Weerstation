@@ -12,7 +12,7 @@ module.exports = function postData(body, _callback) {
                 },
                 body: {
                     "Weatherstation": body[i][0][0],
-                    "Timestamp": body[i][3][0] + "0000+02:00",
+                    "Timestamp": body[i][4][0] + "0000+02:00",
                     "Temperature": body[i][1][0].toString(),
                     "Illuminance": body[i][2][0] + '.0'
                 },

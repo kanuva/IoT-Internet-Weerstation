@@ -7,6 +7,15 @@ angular.module('weatherstationApp', ['chart.js'])
         $http.get('http://localhost:3000/api/getStations').then(function (response) {
             $scope.stationData.stations = response.data;
         });
+
+        $scope.refreshPage = function() {
+            $http.get('http://localhost:3000/api/getStations').then(function (response) {
+                $scope.stationData.stations = response.data;
+            });
+            event.target.id = $scope.stationData.selectedStation;
+            console.log(event);
+            $scope.setSelectedStation(event);
+        };
         //Gets measured data from server
         $scope.setSelectedStation = function (event) {
             $scope.stationData.selectedStation = event.target.id;
@@ -31,7 +40,7 @@ angular.module('weatherstationApp', ['chart.js'])
                         $scope.tempData.reverse();
                         $scope.labels.reverse();
                         $scope.lightData.reverse();
-                        $scope.maxTemp = Math.round(Math.max.apply(Math, $scope.tempData.map(function(o) { return o +10;}))/5)*5;
+                        $scope.maxTemp = Math.round(Math.max.apply(Math, $scope.tempData.map(function(o) { return (o +10);}))/5)*5;
                         $scope.maxLight = Math.round(Math.max.apply(Math, $scope.lightData.map(function(o) { return o +100;}))/100)*100;
                     }
                 });
