@@ -11,10 +11,11 @@ angular.module('weatherstationApp', ['chart.js'])
         $scope.refreshPage = function() {
             $http.get('http://localhost:3000/api/getStations').then(function (response) {
                 $scope.stationData.stations = response.data;
+                if(response) {
+                    event.target.id = $scope.stationData.selectedStation;
+                    $scope.setSelectedStation(event);
+                }
             });
-            event.target.id = $scope.stationData.selectedStation;
-            console.log(event);
-            $scope.setSelectedStation(event);
         };
         //Gets measured data from server
         $scope.setSelectedStation = function (event) {
