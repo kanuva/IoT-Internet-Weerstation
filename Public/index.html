@@ -8,7 +8,7 @@
 
     <script src="js/functions.js"></script>
 
-    <link href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" rel="stylesheet">
+    <link href="CSS/bootstrap.min.css" rel="stylesheet">
 </head>
 <body>
 <div ng-controller="dataController as stationData">
@@ -46,14 +46,12 @@
             </tr>
         </table>
         <div ng-show="stationData.data != null && activeMenu === 'Temp Graph'">
-            <h1>Hier komt de graph</h1>
             <canvas id="line" class="chart chart-line" chart-data="tempData"
                     chart-labels="labels" chart-options="options"
                     chart-click="onClick">
             </canvas>
         </div>
         <div ng-show="stationData.data != null && activeMenu === 'Light Graph'">
-            <h1>Hier komt de graph</h1>
             <canvas id="line" class="chart chart-line" chart-data="lightData"
                     chart-labels="labels" chart-options="options"
                     chart-click="onClick">

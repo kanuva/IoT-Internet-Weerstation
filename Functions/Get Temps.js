@@ -20,7 +20,7 @@ module.exports = function getTemps(StationsWithOnState) {
                     toTurnoff++;
                 }
                 else {
-                    incommingTemps.push([[StationsWithOnState[i].Station_ID], [JSON.parse(body.trim()).temp], [JSON.parse(body.trim()).Illuminance], [getTime()]]);
+                    incommingTemps.push([[StationsWithOnState[i].Station_ID], [JSON.parse(body.trim()).temp], [JSON.parse(body.trim()).Illuminance], [getTime.getTime()]]);
                     toProcess++;
 
                 }

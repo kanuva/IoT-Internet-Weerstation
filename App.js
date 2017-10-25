@@ -24,7 +24,12 @@ app.get('/api/getStations',function(req,res) {
 app.get('/api/getStationData/:station_ID', function (req, res) {
     var query2 = 'Select * from Measuredata where Station_ID = ' + req.params.station_ID + 'ORDER BY Time desc';
     SQLquery(query2, function(result) {
-        res.send(result.recordset);
+        if (!result) {
+            res.sendStatus(500);
+        }
+        else {
+            res.send(result.recordset);
+        }
     })
 });
 

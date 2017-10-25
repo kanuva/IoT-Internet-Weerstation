@@ -7,17 +7,10 @@ var SQLquery = require('./SQL Functions.js'),
 
 
 module.exports = function getToken(_callback) {
-    var newExpireDate = new Date();
-    newExpireDate.setHours(newExpireDate.getHours() + 4);
-    newExpireDate = newExpireDate.toISOString().replace('Z', '');
-
-    var currentTime = new Date();
-    currentTime.setHours(currentTime.getHours() + 2);
-    currentTime = currentTime.toISOString().replace('Z', '');
-    if (tokenExpired < getTime()) {
+    if (tokenExpired < getTime.getTime()) {
         //console.log("Server moet een nieuwe token aanvragen omdat deze verlopen is");
-        askNewToken(newExpireDate, function (Token) {
-            tokenExpired = newExpireDate;
+        askNewToken(getTime.getFutureTime(), function (Token) {
+            tokenExpired = getTime.getFutureTime();
             token = Token.access_token;
             _callback(token);
             return Token.access_token;
@@ -29,8 +22,8 @@ module.exports = function getToken(_callback) {
         SQLquery(query, function (result) {
             if (result.rowsAffected[0] === 0) {
                 //console.log("Er stond niks in de DB dus ik moest naar de server voor een nieuw token");
-                askNewToken(newExpireDate, function (Token) {
-                    tokenExpired = newExpireDate;
+                askNewToken(getTime.getFutureTime(), function (Token) {
+                    tokenExpired = getTime.getFutureTime();
                     _callback(token);
                     return Token.Access_token;
                 });
@@ -44,7 +37,7 @@ module.exports = function getToken(_callback) {
             }
         });
     }
-    else if (token && tokenExpired > currentTime) {
+    else if (token && tokenExpired > getTime.getTime()) {
         //console.log("er is gewoon een token...");
         _callback(token);
         return token;
@@ -62,7 +55,7 @@ function askNewToken(date, _callback) {
         json: true
     }, function (error, response, body) {
         token = 'Bearer ' + body.access_token;
-        var query = "INSERT INTO Token values ('Bearer " + body.access_token + "','" + getTime() + "','" + date + "')";
+        var query = "INSERT INTO Token values ('Bearer " + body.access_token + "','" + getTime.getTime() + "','" + date + "')";
         SQLquery(query, function (result) {
             token = "Bearer " + body.access_token;
             tokenExpired = date;
