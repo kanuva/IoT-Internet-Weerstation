@@ -7,7 +7,6 @@ module.exports = function updateStationState(id, state, _callback) {
             query = query + "Station_ID = " + item + " OR ";
         });
         query = query.slice(0, -4);
-        console.log(query);
         SQLquery(query, function (result) {
             _callback();
         });

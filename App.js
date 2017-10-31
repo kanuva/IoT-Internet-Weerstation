@@ -37,7 +37,6 @@ app.get('/api/getStationData/:station_ID', function (req, res) {
 app.post('/api/report', function (req, res) {
         if (req.body.ID && req.headers['content-type'] === 'application/json') {
             storeNewID(req.body.ID, function (result) {
-                console.log("result: " + result);
                 res.send(result);
             });
         }

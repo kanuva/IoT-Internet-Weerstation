@@ -49,17 +49,16 @@ angular.module('weatherstationApp', ['chart.js'])
             })
         };
         //menu item config
-        $scope.menuItems = ['Table', 'Temp Graph', 'Light Graph'];
+        $scope.menuItems = ['Raw Data', 'Temp Graph', 'Light Graph'];
         $scope.activeMenu = $scope.menuItems[0];
         $scope.setActive = function (menuItem) {
             $scope.activeMenu = menuItem;
-            if (menuItem === 'Temp Graph') {
+            if (menuItem === $scope.menuItems[1]) {
                 $scope.options.scales.yAxes[0].ticks.max = $scope.maxTemp;
             }
-            if (menuItem === 'Light Graph') {
+            if (menuItem === $scope.menuItems[2]) {
                 $scope.options.scales.yAxes[0].ticks.max = $scope.maxLight;
             }
-
         };
 
         //chart config

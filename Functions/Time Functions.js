@@ -1,10 +1,10 @@
 module.exports = {
     getTime: function () {
-        return calculateDate(2).toISOString().replace('Z', '');
+        return calculateDate(1).toISOString().replace('Z', '');
     },
 
     getFutureTime: function () {
-        return calculateDate(4).toISOString().replace('Z', '');
+        return calculateDate(3).toISOString().replace('Z', '');
     },
     timeConversion: function (millisec) {
         //Deze functie maak van millisecs de volgende format HH:MM:SS:mmm
