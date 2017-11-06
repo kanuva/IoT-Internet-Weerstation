@@ -1,6 +1,5 @@
 var request = require('request'),
     updateStationState = require('./Update Station State.js'),
-    getTime = require('./Time Functions.js'),
     StoreMeasureData = require('./Store Measure data.js');
 
 module.exports = function getTemps(StationsWithOnState) {

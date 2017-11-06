@@ -25,19 +25,22 @@ angular.module('weatherstationApp', ['chart.js'])
                 $scope.stationData.data = response.data;
                 //dit volgende blokje is om de datum voor ons leesbaar te maken.
                 //deze loopt over het response.data heen en vervangt de date met een nieuwe format data
+                $scope.tempData = [];
+                $scope.lightData = [];
+                $scope.labels = [];
                 response.data.forEach(function (v, i) {
                     var parts = v.Time.slice(0, -1).split('T');
                     var ptrn = /(\d{4})-(\d{2})-(\d{2})/;
                     parts[0] = parts[0].replace(ptrn, '$3-$2-$1');
                     $scope.stationData.data[i].Time = parts[0] + ' ' + parts[1];
                     //vult het array voor de graph
-                    if (i < 11) {
+                    if (i < 10) {
                         $scope.tempData[i] = $scope.stationData.data[i].Temperature_celsius;
                         $scope.lightData[i] = $scope.stationData.data[i].Illuminate;
                         $scope.labels[i] = $scope.stationData.data[i].Time.slice(0,-4);
                     }
                     //flipt het array voor de juiste volgorde in de graph (anders komen de meest recente temperatuurmetingen links in de graph
-                    if (i === 11) {
+                    if (i === 10 || (i === response.data.length -1 && response.data.length < 10)) {
                         $scope.tempData.reverse();
                         $scope.labels.reverse();
                         $scope.lightData.reverse();
